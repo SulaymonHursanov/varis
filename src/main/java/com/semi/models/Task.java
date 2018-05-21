@@ -1,5 +1,7 @@
 package com.semi.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -41,6 +43,7 @@ public class Task {
     private List<SubTask> subTasks;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
 }
