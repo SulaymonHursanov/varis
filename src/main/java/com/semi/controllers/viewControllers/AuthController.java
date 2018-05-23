@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
@@ -65,5 +66,13 @@ public class AuthController {
         headers.set(tokenHeader, token );
         headers.setLocation(URI.create("/tasks/getAllTasks"));
         return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    @GetMapping("/quit")
+    public String logout(HttpServletResponse response){
+        Cookie token = new Cookie("token", null);
+        token.setMaxAge(0);
+        response.addCookie(token);
+        return "redirect:/login";
     }
 }

@@ -35,7 +35,10 @@ public class JwtAuthFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         Cookie cookie = WebUtils.getCookie(request, "token");
-        String token = cookie.getValue();
+        String token = null;
+
+        if(cookie != null)
+            token= cookie.getValue();
         if (token == null)
             token = request.getHeader(tokenHeader);
         Authentication authentication;
