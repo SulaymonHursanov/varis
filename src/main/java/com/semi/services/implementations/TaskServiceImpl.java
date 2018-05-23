@@ -1,6 +1,7 @@
 package com.semi.services.implementations;
 
 import com.semi.models.Task;
+import com.semi.models.User;
 import com.semi.repositories.TaskRepository;
 import com.semi.services.interfaces.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAllTasks() {
-        return repository.findAll();
+    public List<Task> getAllTasks(User user) {
+        return repository.findAllByUser(user);
     }
 
     @Override

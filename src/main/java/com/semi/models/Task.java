@@ -46,4 +46,7 @@ public class Task {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
+    @ManyToOne
+    private User user;
+
 }

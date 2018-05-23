@@ -1,16 +1,17 @@
-package com.semi.controllers;
+package com.semi.controllers.restControllers;
 
 import com.semi.models.Task;
+import com.semi.models.User;
+import com.semi.security.JwtTokenUtil;
 import com.semi.services.interfaces.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -21,14 +22,22 @@ import java.util.List;
  * @version v1.0
  **/
 @RestController
-public class TaskController {
+@RequestMapping("/api/tasks")
+public class RestTaskController {
 
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
+
     @GetMapping("/getAllTasks")
-    public ResponseEntity<List<Task>> getAllTasks(){
-        return ResponseEntity.ok(taskService.getAllTasks());
+    public ResponseEntity<List<Task>> getAllTasks(HttpServletRequest req){
+        User user = jwtTokenUtil.getUserFromToken(req.getHeader(tokenHeader));
+        return ResponseEntity.ok(taskService.getAllTasks(user));
     }
 
     @PostMapping(value = "/addTask", consumes = "application/json")
@@ -39,6 +48,7 @@ public class TaskController {
         taskService.addNewTask(task);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
 }
 
 /*
